@@ -1,0 +1,40 @@
+
+> rest-express@1.0.0 dev
+> tsx server/index.ts
+
+1:47:00 AM [express] serving on port 5000
+Spotify Connect Request: {
+  headers: {
+    host: '38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
+    accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'accept-encoding': 'identity, gzip, deflate, br, zstd',
+    'accept-language': 'en-US,en;q=0.9',
+    cookie: 'connect.sid=s%3AGSj-MI1q4xOW9QcEzYwzSoZ6j03RPN5F.V2oOM2%2FtPc0%2BwzItPBekRtIu3GIsMtpKoMPOrfJEBfs',
+    referer: 'https://38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev/',
+    'sec-ch-ua': '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-fetch-dest': 'iframe',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-storage-access': 'active',
+    'sec-fetch-user': '?1',
+    'upgrade-insecure-requests': '1',
+    'x-forwarded-for': '104.174.100.141, 10.83.3.153',
+    'x-forwarded-proto': 'https',
+    'x-replit-user-bio': '',
+    'x-replit-user-id': '',
+    'x-replit-user-name': '',
+    'x-replit-user-profile-image': '',
+    'x-replit-user-roles': '',
+    'x-replit-user-teams': '',
+    'x-replit-user-url': ''
+  },
+  originalUrl: '/api/connect/spotify?userId=pending',
+  host: '38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev'
+}
+Generating Spotify auth URL with redirect URI: https://38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev/api/callback/spotify
+Generated Spotify Auth URL: https://accounts.spotify.com/authorize?client_id=706e794733a6457a849b50cc22144c6b&response_type=code&redirect_uri=https%3A%2F%2F38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev%2Fapi%2Fcallback%2Fspotify&scope=user-read-recently-played+user-top-read+playlist-read-private&state=pending
+Generated Spotify Auth URL: https://accounts.spotify.com/authorize?client_id=706e794733a6457a849b50cc22144c6b&response_type=code&redirect_uri=https%3A%2F%2F38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev%2Fapi%2Fcallback%2Fspotify&scope=user-read-recently-played+user-top-read+playlist-read-private&state=pending
+1:47:41 AM [express] GET /api/connect/spotify 302 in 10ms

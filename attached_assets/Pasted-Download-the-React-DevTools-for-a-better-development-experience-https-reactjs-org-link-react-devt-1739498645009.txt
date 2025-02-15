@@ -1,0 +1,19 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+user-form.tsx:31 Initiating Spotify connection...
+38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev/:1 Access to fetch at 'https://accounts.spotify.com/authorize?client_id=706e794733a6457a849b50cc22144c6b&response_type=code&redirect_uri=https%3A%2F%2F38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev%2Fapi%2Fcallback%2Fspotify&scope=user-read-recently-played+user-top-read+playlist-read-private&state=pending' (redirected from 'https://38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev/api/connect/spotify?userId=pending') from origin 'https://38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.Understand this errorAI
+accounts.spotify.com/authorize?client_id=706e794733a6457a849b50cc22144c6b&response_type=code&redirect_uri=https%3A%2F%2F38bcccab-9218-4808-a96d-0c43b3b7f0ee-00-3eqriyljbud8o.janeway.replit.dev%2Fapi%2Fcallback%2Fspotify&scope=user-read-recently-played+user-top-read+playlist-read-private&state=pending:1 
+            
+            
+           Failed to load resource: net::ERR_FAILEDUnderstand this errorAI
+user-form.tsx:64 Error initiating Spotify connection: TypeError: Failed to fetch
+    at handleSpotifyConnect (user-form.tsx:41:30)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=f9b5a11c:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=f9b5a11c:3699:24)
+    at invokeGuardedCallback (chunk-RPCDYKBN.js?v=f9b5a11c:3733:39)
+    at invokeGuardedCallbackAndCatchFirstError (chunk-RPCDYKBN.js?v=f9b5a11c:3736:33)
+    at executeDispatch (chunk-RPCDYKBN.js?v=f9b5a11c:7014:11)
+    at processDispatchQueueItemsInOrder (chunk-RPCDYKBN.js?v=f9b5a11c:7034:15)
+    at processDispatchQueue (chunk-RPCDYKBN.js?v=f9b5a11c:7043:13)
+    at dispatchEventsForPlugins (chunk-RPCDYKBN.js?v=f9b5a11c:7051:11)
+    at chunk-RPCDYKBN.js?v=f9b5a11c:7174:20
+handleSpotifyConnect @ user-form.tsx:64Understand this errorAI
