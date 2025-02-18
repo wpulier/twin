@@ -50,7 +50,7 @@ export const messages = pgTable("messages", {
 });
 
 export type User = typeof users.$inferSelect;
-export type InsertUser = typeof users.$inferInsert;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 
 const letterboxdUrlSchema = z.string().url().refine(
   (url) => {
@@ -83,8 +83,8 @@ export const insertUserSchema = createInsertSchema(users).pick({
   bio: true,
 }).extend({
   name: z.string().min(1).max(50),
-  letterboxdUrl: letterboxdUrlSchema.nullish(),
-  spotifyUrl: spotifyUrlSchema.nullish(),
+  letterboxdUrl: letterboxdUrlSchema.nullish().transform((val) => val === null ? undefined : val),
+  spotifyUrl: spotifyUrlSchema.nullish().transform((val) => val === null ? undefined : val),
   bio: z.string()
 });
 

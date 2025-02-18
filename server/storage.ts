@@ -31,8 +31,8 @@ export class DatabaseStorage implements IStorage {
       .insert(users)
       .values({
         ...insertUser,
-        spotifyUrl: insertUser.spotifyUrl || null,
-        letterboxdUrl: insertUser.letterboxdUrl || null,
+        spotifyUrl: insertUser.spotifyUrl ?? undefined,
+        letterboxdUrl: insertUser.letterboxdUrl ?? undefined,
         letterboxdData: insertUser.letterboxdData || { status: 'not_provided' },
         spotifyData: insertUser.spotifyData || { status: 'not_provided' },
         twinPersonality: null
@@ -49,8 +49,8 @@ export class DatabaseStorage implements IStorage {
       .update(users)
       .set({
         ...insertUser,
-        spotifyUrl: insertUser.spotifyUrl || null,
-        letterboxdUrl: insertUser.letterboxdUrl || null,
+        spotifyUrl: insertUser.spotifyUrl ?? undefined,
+        letterboxdUrl: insertUser.letterboxdUrl ?? undefined,
         letterboxdData: insertUser.letterboxdData || { status: 'not_provided' },
         spotifyData: insertUser.spotifyData || { status: 'not_provided' }
       })
