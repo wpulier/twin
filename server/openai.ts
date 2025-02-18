@@ -25,7 +25,7 @@ async function analyzePersonality(
 Bio: ${bio}
 ${letterboxdData?.status === 'success' ? `
 Their movie preferences:
-- Recent ratings: ${letterboxdData.recentRatings.map(r => `${r.title} (${r.rating})`).join(', ')}
+- Recent ratings: ${letterboxdData.recentRatings.map((r: Rating) => `${r.title} (${r.rating})`).join(', ')}
 - Favorite genres: ${letterboxdData.favoriteGenres.join(', ')}
 - Favorite films: ${letterboxdData.favoriteFilms.join(', ')}
 ` : 'No movie preference data available.'}
@@ -33,7 +33,7 @@ ${spotifyData?.status === 'success' ? `
 Their music preferences:
 - Top artists: ${spotifyData.topArtists.join(', ')}
 - Favorite genres: ${spotifyData.topGenres.join(', ')}
-- Recent tracks: ${spotifyData.recentTracks.map(t => `${t.name} by ${t.artist}`).slice(0, 5).join(', ')}
+- Recent tracks: ${spotifyData.recentTracks.map((t: Track) => `${t.name} by ${t.artist}`).slice(0, 5).join(', ')}
 ` : 'No music preference data available.'}
 
 Create a brief, realistic personality summary based ONLY on the information provided.
@@ -66,7 +66,7 @@ export async function generateTwinPersonality(
 Bio: ${bio}
 ${letterboxdData?.status === 'success' ? `
 Movie Preferences:
-- Recent ratings: ${letterboxdData.recentRatings.map(r => `${r.title} (${r.rating})`).join(', ')}
+- Recent ratings: ${letterboxdData.recentRatings.map((r: Rating) => `${r.title} (${r.rating})`).join(', ')}
 - Favorite genres: ${letterboxdData.favoriteGenres.join(', ')}
 - Favorite films: ${letterboxdData.favoriteFilms.join(', ')}
 ` : 'No movie preference data available.'}
@@ -74,7 +74,7 @@ ${spotifyData?.status === 'success' ? `
 Music Preferences:
 - Top artists: ${spotifyData.topArtists.join(', ')}
 - Favorite genres: ${spotifyData.topGenres.join(', ')}
-- Recent tracks: ${spotifyData.recentTracks.map(t => `${t.name} by ${t.artist}`).slice(0, 5).join(', ')}
+- Recent tracks: ${spotifyData.recentTracks.map((t: Track) => `${t.name} by ${t.artist}`).slice(0, 5).join(', ')}
 ` : 'No music preference data available.'}
 
 Personality Analysis: ${personalityInsight}
