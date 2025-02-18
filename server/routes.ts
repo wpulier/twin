@@ -148,16 +148,24 @@ export function registerRoutes(app: Express): Server {
         return res.redirect('/?error=user_not_found');
       }
 
+      // Before calling generateTwinPersonality, clean the user data:
+      const cleanedLetterboxdData = user.letterboxdData ? { ...user.letterboxdData } : undefined;
+      const cleanedSpotifyData = user.spotifyData
+        ? { ...user.spotifyData, status: user.spotifyData.status as "success" | "error" | "not_provided" }
+        : undefined;
+
       // Generate new twin personality with updated data
       const twin = await generateTwinPersonality(
         user.name,
         user.bio,
-        user.letterboxdData?.status === 'success' ? user.letterboxdData : undefined,
-        spotifyData.status === 'success' ? spotifyData : undefined
+        cleanedLetterboxdData && cleanedLetterboxdData.status === 'success' ? cleanedLetterboxdData : undefined,
+        cleanedSpotifyData && cleanedSpotifyData.status === 'success' ? cleanedSpotifyData : undefined
       );
 
       await storage.updateUser(user.id, {
         ...user,
+        spotifyUrl: user.spotifyUrl ?? undefined,
+        letterboxdUrl: user.letterboxdUrl ?? undefined,
         spotifyData
       });
       await storage.updateUserTwin(user.id, twin);
@@ -201,9 +209,13 @@ export function registerRoutes(app: Express): Server {
 
       console.log('Letterboxd integration result:', letterboxdData);
 
-      const spotifyData = { 
-        status: 'not_provided' as const
-      };
+      const spotifyData: {
+        status: "success" | "error" | "not_provided";
+        topArtists?: string[];
+        topGenres?: string[];
+        recentTracks?: { name: string; artist: string; playedAt?: string }[];
+        error?: string;
+      } = { status: 'not_provided' };
 
       // Update user with integration data
       const updatedUser = await storage.updateUser(user.id, {
@@ -212,14 +224,28 @@ export function registerRoutes(app: Express): Server {
         spotifyData
       });
 
+      // Before calling generateTwinPersonality, clean the user data:
+      const cleanedLetterboxdData = updatedUser.letterboxdData ? { ...updatedUser.letterboxdData } : undefined;
+      const cleanedSpotifyData = updatedUser.spotifyData
+        ? { ...updatedUser.spotifyData, status: updatedUser.spotifyData.status as "success" | "error" | "not_provided" }
+        : undefined;
+
       // Generate twin personality using the fetched data
+      const cleanedUser = {
+        name: updatedUser.name,
+        bio: updatedUser.bio,
+        letterboxdData: cleanedLetterboxdData && cleanedLetterboxdData.status === 'success' ? cleanedLetterboxdData : undefined,
+        spotifyData: cleanedSpotifyData && cleanedSpotifyData.status === 'success' ? cleanedSpotifyData : undefined
+      };
+
       const twin = await generateTwinPersonality(
-        userData.name,
-        userData.bio,
-        letterboxdData.status === 'success' ? letterboxdData : undefined
+        cleanedUser.name,
+        cleanedUser.bio,
+        cleanedUser.letterboxdData,
+        cleanedUser.spotifyData
       );
 
-      const finalUser = await storage.updateUserTwin(user.id, twin);
+      const finalUser = await storage.updateUserTwin(updatedUser.id, twin);
       res.json(finalUser);
     } catch (error) {
       const message = error instanceof Error ? error.message : "An error occurred";
@@ -242,10 +268,13 @@ export function registerRoutes(app: Express): Server {
         ? await getLetterboxdProfile(userData.letterboxdUrl)
         : { status: 'not_provided' as const };
 
-      const spotifyData = { 
-        status: userData.spotifyUrl ? 'error' : 'not_provided' as const,
-        error: userData.spotifyUrl ? 'Spotify integration not implemented yet' : undefined
-      };
+      const spotifyData: {
+        status: "success" | "error" | "not_provided";
+        topArtists?: string[];
+        topGenres?: string[];
+        recentTracks?: { name: string; artist: string; playedAt?: string }[];
+        error?: string;
+      } = { status: userData.spotifyUrl ? 'error' : 'not_provided' as const, error: userData.spotifyUrl ? 'Spotify integration not implemented yet' : undefined };
 
       // Update user with integration data
       user = await storage.updateUser(userId, {
@@ -254,11 +283,25 @@ export function registerRoutes(app: Express): Server {
         spotifyData
       });
 
+      // Before calling generateTwinPersonality, clean the user data:
+      const cleanedLetterboxdData = user.letterboxdData ? { ...user.letterboxdData } : undefined;
+      const cleanedSpotifyData = user.spotifyData
+        ? { ...user.spotifyData, status: user.spotifyData.status as "success" | "error" | "not_provided" }
+        : undefined;
+
       // Generate twin personality using the fetched data
+      const cleanedUser = {
+        name: user.name,
+        bio: user.bio,
+        letterboxdData: cleanedLetterboxdData && cleanedLetterboxdData.status === 'success' ? cleanedLetterboxdData : undefined,
+        spotifyData: cleanedSpotifyData && cleanedSpotifyData.status === 'success' ? cleanedSpotifyData : undefined
+      };
+
       const twin = await generateTwinPersonality(
-        userData.name,
-        userData.bio,
-        letterboxdData.status === 'success' ? letterboxdData : undefined
+        cleanedUser.name,
+        cleanedUser.bio,
+        cleanedUser.letterboxdData,
+        cleanedUser.spotifyData
       );
 
       const updatedUser = await storage.updateUserTwin(userId, twin);
