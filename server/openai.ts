@@ -1,39 +1,46 @@
 import OpenAI from "openai";
 import { config } from "./config";
-
-interface Rating {
-  title: string;
-  rating: number;
-}
-
-interface Track {
-  name: string;
-  artist: string;
-}
+import type { Rating, Track } from "@shared/schema";
 
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024
 const openai = new OpenAI({ 
   apiKey: config.openai.apiKey
 });
 
+interface LetterboxdData {
+  status: 'success' | 'error' | 'not_provided';
+  recentRatings?: Rating[];
+  favoriteGenres?: string[];
+  favoriteFilms?: string[];
+  error?: string;
+}
+
+interface SpotifyData {
+  status: 'success' | 'error' | 'not_provided';
+  topArtists?: string[];
+  topGenres?: string[];
+  recentTracks?: Track[];
+  error?: string;
+}
+
 async function analyzePersonality(
   bio: string,
-  letterboxdData?: any,
-  spotifyData?: any
+  letterboxdData?: LetterboxdData,
+  spotifyData?: SpotifyData
 ): Promise<string> {
   const prompt = `Analyze this person's personality based on:
 Bio: ${bio}
 ${letterboxdData?.status === 'success' ? `
 Their movie preferences:
-- Recent ratings: ${letterboxdData.recentRatings.map((r: Rating) => `${r.title} (${r.rating})`).join(', ')}
-- Favorite genres: ${letterboxdData.favoriteGenres.join(', ')}
-- Favorite films: ${letterboxdData.favoriteFilms.join(', ')}
+- Recent ratings: ${letterboxdData.recentRatings?.map((r: Rating) => `${r.title} (${r.rating})`).join(', ')}
+- Favorite genres: ${letterboxdData.favoriteGenres?.join(', ')}
+- Favorite films: ${letterboxdData.favoriteFilms?.join(', ')}
 ` : 'No movie preference data available.'}
 ${spotifyData?.status === 'success' ? `
 Their music preferences:
-- Top artists: ${spotifyData.topArtists.join(', ')}
-- Favorite genres: ${spotifyData.topGenres.join(', ')}
-- Recent tracks: ${spotifyData.recentTracks.map((t: Track) => `${t.name} by ${t.artist}`).slice(0, 5).join(', ')}
+- Top artists: ${spotifyData.topArtists?.join(', ')}
+- Favorite genres: ${spotifyData.topGenres?.join(', ')}
+- Recent tracks: ${spotifyData.recentTracks?.map((t: Track) => `${t.name} by ${t.artist}`).slice(0, 5).join(', ')}
 ` : 'No music preference data available.'}
 
 Create a brief, realistic personality summary based ONLY on the information provided.
@@ -52,8 +59,8 @@ Keep it to 2-3 concise sentences.`;
 export async function generateTwinPersonality(
   name: string,
   bio: string,
-  letterboxdData?: any,
-  spotifyData?: any
+  letterboxdData?: LetterboxdData,
+  spotifyData?: SpotifyData
 ): Promise<{
   interests: string[];
   style: string;
@@ -66,15 +73,15 @@ export async function generateTwinPersonality(
 Bio: ${bio}
 ${letterboxdData?.status === 'success' ? `
 Movie Preferences:
-- Recent ratings: ${letterboxdData.recentRatings.map((r: Rating) => `${r.title} (${r.rating})`).join(', ')}
-- Favorite genres: ${letterboxdData.favoriteGenres.join(', ')}
-- Favorite films: ${letterboxdData.favoriteFilms.join(', ')}
+- Recent ratings: ${letterboxdData.recentRatings?.map((r: Rating) => `${r.title} (${r.rating})`).join(', ')}
+- Favorite genres: ${letterboxdData.favoriteGenres?.join(', ')}
+- Favorite films: ${letterboxdData.favoriteFilms?.join(', ')}
 ` : 'No movie preference data available.'}
 ${spotifyData?.status === 'success' ? `
 Music Preferences:
-- Top artists: ${spotifyData.topArtists.join(', ')}
-- Favorite genres: ${spotifyData.topGenres.join(', ')}
-- Recent tracks: ${spotifyData.recentTracks.map((t: Track) => `${t.name} by ${t.artist}`).slice(0, 5).join(', ')}
+- Top artists: ${spotifyData.topArtists?.join(', ')}
+- Favorite genres: ${spotifyData.topGenres?.join(', ')}
+- Recent tracks: ${spotifyData.recentTracks?.map((t: Track) => `${t.name} by ${t.artist}`).slice(0, 5).join(', ')}
 ` : 'No music preference data available.'}
 
 Personality Analysis: ${personalityInsight}

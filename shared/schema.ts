@@ -2,6 +2,18 @@ import { pgTable, text, serial, integer, boolean, json } from "drizzle-orm/pg-co
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+export interface Rating {
+  title: string;
+  rating: string;
+  year: string;
+}
+
+export interface Track {
+  name: string;
+  artist: string;
+  playedAt?: string;
+}
+
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   name: text("name").default('Anonymous').notNull(),
@@ -10,7 +22,7 @@ export const users = pgTable("users", {
   bio: text("bio").notNull(),
   letterboxdData: json("letterboxd_data").$type<{
     status: 'success' | 'error' | 'not_provided';
-    recentRatings?: Array<{ title: string; rating: string; year: string }>;
+    recentRatings?: Rating[];
     favoriteGenres?: string[];
     favoriteFilms?: string[];
     error?: string;
@@ -19,11 +31,7 @@ export const users = pgTable("users", {
     status: 'success' | 'error' | 'not_provided';
     topArtists?: string[];
     topGenres?: string[];
-    recentTracks?: Array<{
-      name: string;
-      artist: string;
-      playedAt?: string;
-    }>;
+    recentTracks?: Track[];
     error?: string;
   }>().default({ status: 'not_provided' }),
   twinPersonality: json("twin_personality").$type<{
@@ -40,6 +48,9 @@ export const messages = pgTable("messages", {
   content: text("content").notNull(),
   fromUser: boolean("from_user").notNull(),
 });
+
+export type User = typeof users.$inferSelect;
+export type InsertUser = typeof users.$inferInsert;
 
 const letterboxdUrlSchema = z.string().url().refine(
   (url) => {
@@ -68,15 +79,15 @@ const spotifyUrlSchema = z.string().url().refine(
 export const insertUserSchema = createInsertSchema(users).pick({
   name: true,
   letterboxdUrl: true,
+  spotifyUrl: true,
   bio: true,
 }).extend({
   name: z.string().min(1).max(50),
-  letterboxdUrl: letterboxdUrlSchema.optional().or(z.literal("")),
+  letterboxdUrl: letterboxdUrlSchema.nullish(),
+  spotifyUrl: spotifyUrlSchema.nullish(),
   bio: z.string()
 });
 
 export const insertMessageSchema = createInsertSchema(messages);
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
 export type Message = typeof messages.$inferSelect;
