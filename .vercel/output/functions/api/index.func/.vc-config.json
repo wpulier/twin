@@ -7,6 +7,8 @@
     "NODE_ENV": "production"
   },
   "supportsResponseStreaming": true,
+  "maxDuration": 10,
+  "memory": 1024,
   "framework": null,
   "experimentalResponseStreaming": true,
   "regions": ["iad1"]
