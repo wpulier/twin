@@ -6,5 +6,8 @@
   "environment": {
     "NODE_ENV": "production"
   },
-  "supportsResponseStreaming": true
+  "supportsResponseStreaming": true,
+  "framework": null,
+  "experimentalResponseStreaming": true,
+  "regions": ["iad1"]
 } 
