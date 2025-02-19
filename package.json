@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx server/index.ts",
-    "build": "rm -rf .vercel/output && mkdir -p .vercel/output && tsc && vite build && mkdir -p .vercel/output/static && cp -r client/dist/* .vercel/output/static/ && mkdir -p .vercel/output/functions/api && cp -r dist/server/* .vercel/output/functions/api/ && cp .vercel/output/static/index.html .vercel/output/static/404.html",
+    "build": "rm -rf .vercel/output && mkdir -p .vercel/output && tsc && vite build && mkdir -p .vercel/output/static && cp -r client/dist/* .vercel/output/static/ && mkdir -p .vercel/output/functions/api && cp -r dist/server/* .vercel/output/functions/api/ && cp -r node_modules .vercel/output/functions/api/ && cp package.json .vercel/output/functions/api/ && cp .env .vercel/output/functions/api/ && cp .vercel/output/static/index.html .vercel/output/static/404.html",
     "start": "NODE_ENV=production node dist/server/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push"

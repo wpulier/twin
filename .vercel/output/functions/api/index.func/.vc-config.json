@@ -2,5 +2,9 @@
   "runtime": "@vercel/node@3.0.0",
   "handler": "index.js",
   "launcherType": "Nodejs",
-  "shouldAddHelpers": true
+  "shouldAddHelpers": true,
+  "environment": {
+    "NODE_ENV": "production"
+  },
+  "supportsResponseStreaming": true
 } 
