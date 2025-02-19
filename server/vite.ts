@@ -98,7 +98,7 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const clientDist = path.resolve(__dirname, "..", "client", "dist");
+  const clientDist = path.resolve(__dirname, "..", "client");
 
   // Serve all static files from the client/dist directory
   app.use(express.static(clientDist));
