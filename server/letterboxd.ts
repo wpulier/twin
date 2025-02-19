@@ -29,6 +29,19 @@ interface LetterboxdNotProvided {
 
 type LetterboxdResult = LetterboxdSuccess | LetterboxdError | LetterboxdNotProvided;
 
+interface RssResult {
+  rss: {
+    channel: Array<{
+      item?: Array<{
+        'letterboxd:filmTitle'?: string[];
+        'letterboxd:filmYear'?: string[];
+        'letterboxd:memberRating'?: string[];
+        'letterboxd:filmGenres'?: string[];
+      }>;
+    }>;
+  };
+}
+
 function validateLetterboxdUrl(url: string): boolean {
   try {
     const parsed = new URL(url);
@@ -71,9 +84,9 @@ export async function getLetterboxdProfile(url: string): Promise<LetterboxdResul
     console.log('RSS response type:', response.headers['content-type']);
     console.log('RSS content preview:', response.data.substring(0, 500));
 
-    let result;
+    let result: RssResult;
     try {
-      result = await parseXml(response.data);
+      result = (await parseXml(response.data)) as RssResult;
     } catch (parseError) {
       console.error('Failed to parse XML:', parseError);
       return {
@@ -112,7 +125,7 @@ export async function getLetterboxdProfile(url: string): Promise<LetterboxdResul
     // Process recent films
     const recentRatings = items
       .slice(0, 20) // Look at more items to get better genre data
-      .map((item: any): LetterboxdRating | null => {
+      .map((item): LetterboxdRating | null => {
         try {
           const filmTitle = item['letterboxd:filmTitle']?.[0];
           const filmYear = item['letterboxd:filmYear']?.[0];

@@ -1,9 +1,8 @@
-import type { Express, Response } from "express";
+import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema } from "@shared/schema";
 import { generateTwinPersonality, streamChatResponse } from "./openai";
-import { WebSocketServer } from 'ws';
 import { getLetterboxdProfile } from './letterboxd';
 import { spotifyClient } from './spotify';
 import session from 'express-session';

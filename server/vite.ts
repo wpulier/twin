@@ -2,14 +2,41 @@ import express, { type Express } from "express";
 import fs from "fs";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import { createServer as createViteServer, createLogger } from "vite";
+import { createServer as createViteServer, createLogger, type UserConfig } from "vite";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import { type Server } from "http";
-import viteConfig from "../vite.config";
+import react from "@vitejs/plugin-react";
+import themePlugin from "@replit/vite-plugin-shadcn-theme-json";
+import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { nanoid } from "nanoid";
 
 const viteLogger = createLogger();
+
+const viteConfig: UserConfig = {
+  plugins: [react(), runtimeErrorOverlay(), themePlugin()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "../client/src"),
+      "@shared": path.resolve(__dirname, "../shared")
+    }
+  },
+  root: path.resolve(__dirname, "../client"),
+  publicDir: path.resolve(__dirname, "../client/public"),
+  build: {
+    outDir: path.resolve(__dirname, "../client/dist"),
+    emptyOutDir: true
+  },
+  server: {
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      }
+    }
+  }
+};
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {

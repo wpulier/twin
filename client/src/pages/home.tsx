@@ -9,8 +9,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 
 export default function Home() {
-  const [location] = useLocation();
-  const [, setLocation] = useLocation();
+  const [, navigate] = useLocation();
   const { toast } = useToast();
 
   // Handle form data restoration after Spotify OAuth
@@ -41,7 +40,7 @@ export default function Home() {
         title: "Twin created!",
         description: "Your digital twin is ready to chat.",
       });
-      setLocation(`/chat/${data.id}`);
+      navigate(`/chat/${data.id}`);
     },
     onError: (error) => {
       toast({

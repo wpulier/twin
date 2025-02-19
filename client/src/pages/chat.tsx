@@ -1,34 +1,31 @@
 import { useEffect, useRef, useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams, useLocation } from "wouter";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useForm } from "react-hook-form";
-import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Send, RefreshCw, Info, Edit2 } from "lucide-react";
+import { Send, RefreshCw, Info } from "lucide-react";
+import { queryClient } from "@/lib/queryClient";
+import { motion } from "framer-motion";
+import { type User, type Message } from "@shared/schema";
+import { useForm } from "react-hook-form";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { UserForm } from "@/components/user-form";
-import { queryClient } from "@/lib/queryClient";
-import { motion } from "framer-motion";
-import { type User, type Message } from "@shared/schema";
 
 export default function Chat() {
   const { id } = useParams();
+  const [, setLocation] = useLocation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
   const [streamingMessage, setStreamingMessage] = useState<string>("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false);
   const [optimisticMessage, setOptimisticMessage] = useState<string | null>(null);
 
   const form = useForm({
@@ -44,28 +41,6 @@ export default function Chat() {
   const { data: messages = [] } = useQuery<Message[]>({
     queryKey: [`/api/users/${id}/messages`],
     enabled: !isStreaming, // Don't fetch messages while streaming
-  });
-
-  const updateUser = useMutation({
-    mutationFn: async (data: any) => {
-      const res = await apiRequest("PATCH", `/api/users/${id}`, data);
-      return res.json();
-    },
-    onSuccess: () => {
-      toast({
-        title: "Profile updated!",
-        description: "Your digital twin's personality has been refreshed.",
-      });
-      setShowEditForm(false);
-      queryClient.invalidateQueries({ queryKey: [`/api/users/${id}`] });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
   });
 
   const sendMessage = useMutation({
@@ -148,14 +123,6 @@ export default function Chat() {
         <div className="flex-1" />
         <h1 className="text-xl font-semibold flex-1 text-center">Chat with {user.name}</h1>
         <div className="flex-1 flex justify-end gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setShowEditForm(true)}
-            title="Edit Twin Info"
-          >
-            <Edit2 className="h-4 w-4" />
-          </Button>
           <Button
             variant="outline"
             size="icon"
