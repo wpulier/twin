@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx server/index.ts",
-    "build": "rm -rf dist && tsc && vite build && mkdir -p dist/api && cp -r dist/server/* dist/api/ && cp -r dist/shared dist/api/ && cp package.json dist/api/ && cp .env dist/api/ && mv client/dist/* dist/",
+    "build": "rm -rf dist && tsc && vite build && mkdir -p dist/api && cp -r dist/server/* dist/api/ && cp -r dist/shared dist/api/ && cp package.json dist/api/ && cp .env dist/api/ && cp -r node_modules dist/api/ && mv client/dist/* dist/ && mv dist/api/index.js dist/api/index.js",
     "start": "NODE_ENV=production node dist/server/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push"
